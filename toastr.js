@@ -51,9 +51,9 @@
                 });
             }
 
-            function getContainer(options, create) {
+            function getContainer(toastElement, options, create) {
                 if (!options) { options = getOptions(); }
-                $container = $('#' + options.containerId);
+                $container = toastElement.closest("." + options.containerId);
                 if ($container.length) {
                     return $container;
                 }
@@ -99,7 +99,7 @@
 
             function clear($toastElement) {
                 var options = getOptions();
-                if (!$container) { getContainer(options); }
+                if (!$container) { getContainer($toastElement, options); }
                 if (!clearToast($toastElement, options)) {
                     clearContainer(options);
                 }
@@ -107,7 +107,7 @@
 
             function remove($toastElement) {
                 var options = getOptions();
-                if (!$container) { getContainer(options); }
+                if (!$container) { getContainer($toastElement, options); }
                 if ($toastElement && $(':focus', $toastElement).length === 0) {
                     removeToast($toastElement);
                     return;
@@ -120,14 +120,14 @@
 
             //#region Internal Methods
 
-            function clearContainer (options) {
+            function clearContainer(options) {
                 var toastsToClear = $container.children();
                 for (var i = toastsToClear.length - 1; i >= 0; i--) {
                     clearToast($(toastsToClear[i]), options);
-                }
+                };
             }
 
-            function clearToast ($toastElement, options) {
+            function clearToast($toastElement, options) {
                 if ($toastElement && $(':focus', $toastElement).length === 0) {
                     $toastElement[options.hideMethod]({
                         duration: options.hideDuration,
@@ -141,12 +141,24 @@
 
             function createContainer(options) {
                 $container = $('<div/>')
-                    .attr('id', options.containerId)
+                    .addClass(options.containerId)
                     .addClass(options.positionClass)
                     .attr('aria-live', 'polite')
                     .attr('role', 'alert');
 
-                $container.appendTo($(options.target));
+                var target = $(options.target)
+
+                // If the default target (body) is overridden then absolutely position the toastr container and reset the z-index.
+                if (options.target !== "body") {
+                    $container.css({ position: "absolute", zIndex: "auto" });
+
+                    // Ensure that the absolutely positioned toastr container is relative to the target.
+                    if (target.css("position") === "static") {
+                        target.css("position", "relative");
+                    }
+                }
+
+                $container.appendTo(target);
                 return $container;
             }
 
@@ -198,7 +210,8 @@
                 if (options.preventDuplicates) {
                     if (map.message === previousToast) {
                         return;
-                    } else {
+                    }
+                    else {
                         previousToast = map.message;
                     }
                 }
@@ -209,8 +222,6 @@
                 }
 
                 toastId++;
-
-                $container = getContainer(options, true);
                 var intervalId = null,
                     $toastElement = $('<div/>'),
                     $titleElement = $('<div/>'),
@@ -245,7 +256,7 @@
                 }
 
                 if (options.closeButton) {
-                    $closeElement.addClass('toast-close-button').attr('role', 'button');
+                    $closeElement.addClass('toast-close-button').attr("role", "button");
                     $toastElement.prepend($closeElement);
                 }
 
@@ -255,13 +266,17 @@
                 }
 
                 $toastElement.hide();
+
+                $container = getContainer($toastElement, options, true);
+
                 if (options.newestOnTop) {
                     $container.prepend($toastElement);
                 } else {
                     $container.append($toastElement);
                 }
+
                 $toastElement[options.showMethod](
-                    {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
+                    { duration: options.showDuration, easing: options.showEasing, complete: options.onShown }
                 );
 
                 if (options.timeOut > 0) {
@@ -336,7 +351,7 @@
                     clearTimeout(intervalId);
                     progressBar.hideEta = 0;
                     $toastElement.stop(true, true)[options.showMethod](
-                        {duration: options.showDuration, easing: options.showEasing}
+                        { duration: options.showDuration, easing: options.showEasing }
                     );
                 }
 
@@ -351,7 +366,7 @@
             }
 
             function removeToast($toastElement) {
-                if (!$container) { $container = getContainer(); }
+                if (!$container) { $container = getContainer($toastElement); }
                 if ($toastElement.is(':visible')) {
                     return;
                 }
