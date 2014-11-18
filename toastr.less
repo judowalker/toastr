@@ -131,7 +131,7 @@ button.toast-close-button {
 	left: 12px;
 }
 
-#toast-container {
+.toast-container {
 	position: fixed;
 	z-index: 999999;
 
@@ -152,13 +152,13 @@ button.toast-close-button {
 		background-repeat: no-repeat;
 		.boxShadow(0 0 12px @grey);
 		color: @white;
-		.opacity(0.8);
+		.opacity(0.95);
 	}
 
 	> :hover {
 		.boxShadow(0 0 12px @black);
 		.opacity(1);
-		cursor: pointer;
+		//cursor: pointer;
 	}
 
 	> .toast-info {

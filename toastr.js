@@ -42,6 +42,10 @@
 
             //#region Accessible Methods
             function error(message, title, optionsOverride) {
+                if (typeof title === "object") {
+                    optionsOverride = title;
+                    title = undefined;
+                }
                 return notify({
                     type: toastType.error,
                     iconClass: getOptions().iconClasses.error,
@@ -64,6 +68,10 @@
             }
 
             function info(message, title, optionsOverride) {
+                if (typeof title === "object") {
+                    optionsOverride = title;
+                    title = undefined;
+                }
                 return notify({
                     type: toastType.info,
                     iconClass: getOptions().iconClasses.info,
@@ -78,6 +86,10 @@
             }
 
             function success(message, title, optionsOverride) {
+                if (typeof title === "object") {
+                    optionsOverride = title;
+                    title = undefined;
+                }
                 return notify({
                     type: toastType.success,
                     iconClass: getOptions().iconClasses.success,
@@ -88,6 +100,10 @@
             }
 
             function warning(message, title, optionsOverride) {
+                if (typeof title === "object") {
+                    optionsOverride = title;
+                    title = undefined;
+                }
                 return notify({
                     type: toastType.warning,
                     iconClass: getOptions().iconClasses.warning,
