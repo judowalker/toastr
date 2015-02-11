@@ -18,6 +18,7 @@
   text-decoration: none;
 }
 .toast-close-button {
+  line-height: 1;
   position: relative;
   right: -0.3em;
   top: -0.3em;
