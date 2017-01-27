@@ -136,6 +136,7 @@ button.toast-close-button {
 .toast-container.toast-top-full-width > div,
 .toast-container.toast-bottom-full-width > div {
   width: 100%;
+  border-radius: 0;
 }
 .toast {
   background-color: #030303;
