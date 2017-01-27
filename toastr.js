@@ -161,9 +161,8 @@
 
                 var target = $(options.target)
 
-                // If the default target (body) is overridden then absolutely position the toastr container and reset the z-index.
+                // If the default target (body) is overridden then position the toastr container and reset the z-index.
                 if (options.target !== "body") {
-                    $container.removeClass(options.positionClass);
                     $container.css({ position: options.positionStaticInTarget ? "static" : "absolute", zIndex: "auto" });
 
                     // Ensure that the absolutely positioned toastr container is relative to the target.
