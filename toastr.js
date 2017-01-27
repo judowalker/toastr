@@ -49,7 +49,12 @@
 
             function getContainer(toastElement, options, create) {
                 if (!options) { options = getOptions(); }
-                $container = toastElement.closest("." + options.containerId);
+                if (toastElement) {
+                    $container = toastElement.closest("." + options.containerId);
+                }
+                else {
+                    $container = $("." + options.containerId);
+                }
                 if ($container.length) {
                     return $container;
                 }
@@ -158,7 +163,7 @@
 
                 // If the default target (body) is overridden then absolutely position the toastr container and reset the z-index.
                 if (options.target !== "body") {
-                    $container.css({ position: "absolute", zIndex: "auto" });
+                    $container.css({ position: options.positionStaticInTarget ? "static" : "absolute", zIndex: "auto" });
 
                     // Ensure that the absolutely positioned toastr container is relative to the target.
                     if (target.css("position") === "static") {
